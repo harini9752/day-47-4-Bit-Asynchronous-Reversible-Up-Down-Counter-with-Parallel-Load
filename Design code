@@ -1,0 +1,25 @@
+module four_bit_async_reversible_up_down_counter (
+  input wire clk,
+  input wire rst_n, // Active-low asynchronous reset
+  input wire up_down, // Up: 1, Down: 0
+  input wire parallel_load,
+  input wire [3:0] parallel_input,
+  output reg [3:0] count
+);
+
+  always @(posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+      count <= 4'b0000;
+    end else if (parallel_load) begin
+      // Parallel load
+      count <= parallel_input;
+    end else if (up_down) begin
+      // Upward counting
+      count <= count + 1;
+    end else begin
+      // Downward counting
+      count <= count - 1;
+    end
+  end
+
+endmodule
